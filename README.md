@@ -239,9 +239,7 @@ do { // 0에서 9까지 출력
 ```java
 반복문 안에 다른 반복문을 만들 수 있음.
 for 문 안에 for 문이나 while 문을 둘 수도 있고, while 문 안에 for 문, while 문, do-while 문을 둘 수 있음.
-```
 
-```java
 ex)
 for(int i = 0; i < 100; i++) {
     for(int j = 0; j < 1000; j++) {
