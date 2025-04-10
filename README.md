@@ -1,5 +1,7 @@
 # 진재원 202430131
 
+
+
 ## 4월 10일(6주차)
 
 ### 예외 처리(try-catch-finally)
@@ -128,7 +130,7 @@
     - 생성자 이름은 클래스 이름과 동일
     - 생성자는 여러 개 작성 가능(생성자 중복)
     ex)
-    public class Circle() {
+    public class Circle {
         public Circle() {...} // 매개 변수 없는 생성자
         public Circle(int r, String n) {...} // 2개의 매개 변수를 가진 생성자
     }
@@ -143,9 +145,6 @@
     - 생성자는 리턴 타입 지정 불가
     ex)
     public void Circle() {...} // error. void를 리턴 타입으로 사용할 수 없음.
-
-
-
 
 ## 4월 3일(5주차)
 
