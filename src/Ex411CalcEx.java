@@ -9,5 +9,6 @@ public class Ex411CalcEx {
         System.out.println(Calc.abs(-5));
         System.out.println(Calc.max(10, 8));
         System.out.println(Calc.min(-3, -8));
+        
     }
 }
