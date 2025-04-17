@@ -1,3 +1,37 @@
+# 빌드 결과물 (컴파일된 클래스 파일)
 /bin
+
+# VS Code 관련 설정 (개인 설정)
 /.vscode
-/lib
+
+# 라이브러리 (직접 추가하는 경우 - 필요에 따라 주석 해제)
+#/lib
+
+# 실행 가능한 JAR 파일 (배포를 위해 필요한 경우 제외)
+*.jar
+
+# 클래스 파일 (추가적으로 생성될 수 있는 경우)
+*.class
+
+# Maven 관련 (추후 Maven을 사용할 경우를 대비)
+.mvn/
+pom.xml.lock
+/target
+
+# Gradle 관련 (추후 Gradle을 사용할 경우를 대비)
+.gradle/
+/build
+
+# 임시 파일 및 폴더
+*.log
+*.tmp
+/temp
+/tmp
+
+# OS 관련 파일 (Windows)
+Thumbs.db
+$RECYCLE.BIN/
+desktop.ini
+
+# 기타
+.DS_Store      # macOS
