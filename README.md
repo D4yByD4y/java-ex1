@@ -1,5 +1,192 @@
 # 진재원 202430131
 
+## 4월 18일(보강)
+
+### 클래스 상속과 객체
+```java
+상속 선언: extends 키워드 사용
+부모 클래스를 물려받아 자식 클래스를 확장한다는 의미
+
+부모 클래스 -> 슈퍼 클래스(super class)
+자식 클래스 -> 서브 클래스(sub class)
+
+class Point {
+    int x, y;
+    ....
+}
+
+class ColorPoint extends Point { // Point를 상속받는 ColorPoint 클래스 선언
+    ....
+}
+
+ColorPoint는 Point를 물려 받으므로, Point에 선언된 필드와 메소드 선언 필요 없음
+```
+
+### 자바 상속의 특징
+```java
+클래스 다중 상속(multiple inheritance) 불허
+-> 하나의 클래스가 둘 이상의 부모 클래스를 동시에 상속받는 것
+
+C++는 다중 상속 가능
+
+C++는 다중 상속으로 멤버가 중복 생성되는 문제 있음 (다이아몬드 상속)
+-> 부모 클래스 간에 계층적 관계가 있을 경우, 중복된 멤버 생성 가능
+-> 모호성(Ambiguity) 문제: 두 부모 클래스에 동일한 이름의 멤버(변수나 함수)가 존재할 경우, 어떤 부모의 멤버를 호출해야 할지 모호해짐
+
+자바는 인터페이스(interface)의 다중 상속 허용
+-> 다중 상속과 유사한 기능 제공
+
+모든 자바 클래스는 묵시적으로 Object 클래스 상속 받음
+-> java.lang.Object / 모든 클래스의 슈퍼 클래스
+```
+
+### 슈퍼 클래스의 멤버에 대한 서브 클래스의 접근
+```java
+슈퍼 클래스의 private 멤버: 서브 클래스에서 접근 x
+
+슈퍼 클래스의 디폴트 멤버: 서브 클래스가 동일한 패키지에 있을 때, 접근 가능
+
+슈퍼 클래스의 public 멤버: 서브 클래스는 항상 접근 가능
+
+슈퍼 클래스의 protected 멤버: 같은 패키지 내의 모든 클래스 접근 허용 / 패키지 여부와 상관없이 서브 클래스는 접근 가능
+```
+
+### 서브 클래스와 슈퍼 클래스의 생성자 선택
+```java
+슈퍼 클래스와 서브 클래스: 각각 여러 개의 생성자 작성 가능
+
+서브 클래스의 객체가 생성될 때: 슈퍼 클래스 생성자 1개와 서브 클래스 생성자 1개가 실행
+
+서브 클래스의 생성자와 슈퍼 클래스의 생성자가 결정되는 방식
+1. 개발자의 명시적 선택
+-> 서브 클래스 개발자가 슈퍼 클래스의 생성자 명시적 선택
+-> super() 키워드를 이용하여 선택
+
+2. 컴파일러가 기본 생성자 선택
+-> 서브 클래스 개발자가 슈퍼 클래스의 생성자를 선택하지 않는 경우
+-> 컴파일러가 자동으로 슈퍼 클래스의 기본 생성자 선택
+```
+
+### 업캐스팅(upcasting)
+```java
+하위 클래스의 레퍼런스는 상위 클래스를 가리킬 수 없지만, 상위 클래스의 레퍼런스는 하위 클래스를 가리킬 수 있다는 설명
+
+ex)
+생물이 들어가는 박스에 사람이나 코끼리를 넣어도 무방
+사람이나 코끼리 모두 생물을 상속받았기 때문
+
+서브 클래스의 레퍼런스를 슈퍼 클래스 레퍼런스에 대입
+슈퍼 클래스 레퍼런스로 서브 클래스 객체를 가리키게 되는 현상
+
+class Person {
+    String name;
+    String id;
+    public Person(String name) {
+        this.name = name;
+    }
+}
+class Student extends Person {
+    String grade;
+    String department;
+    public Student(String name) {
+        super(name);
+    }
+}
+
+public class UpcastingEx {
+    public static void main(String[] args) {
+        Person p;
+        Student s = new Student("이재문");
+        p = s; // 업캐스팅 발생
+        System.out.println(p.name); // 오류 없음
+
+        p.grade = "A"; // 컴파일 오류
+        P.department = "Com"; // 컴파일 오류
+    }
+}
+p 레퍼런스는 Person 타입이기 때문에 Person의 멤버에만 접근이 가능.
+p.grade 와 p.department 는 Person 타입으로 Student의 멤버에 접근하려고 해서 오류
+모든 멤버에 접근하려면 s 레퍼런스를 사용해야 함
+```
+
+### 그렇다면 왜 p = s로 업케스팅을 한 걸까?
+```java
+업케스팅의 제한 사항을 설명하기 위한 코드
+실제로는 이런 식으로 사용하지 않음(UpcastingEx 참조)
+
+실제로는 여러 자식 클래스를 하나의 부모 타입으로 다루기 위해 사용
+Person[] people = new Person[3];
+people[0] = new Student("홍길동");
+people[1] = new Student("김영희");
+people[2] = new Student("이순신");
+
+이렇게 하면 공통된 타입(Person) 으로 여러 자식 클래스를 한 배열에 담을 수 있음
+대신 접근은 Person 수준에서만 가능
+```
+
+### 다운캐스팅(downcasting)
+```java
+슈퍼 클래스 레퍼런스를 서브 클래스 레퍼런스에 대입
+업캐스팅 된 것을 다시 원래대로 되돌리는 것
+반드시 명시적 타입 변환 지정
+
+public class DowncastingEx {
+    public static void main(String args[]) {
+        Person p = new Student("이재문"); // 업캐스팅
+        Student s;
+
+        s = (Student)p; // 다운캐스팅
+
+        System.out.println(s.name); // 오류 없음
+        s.grade = "A";
+    }
+}
+```
+
+### instanceof 연산자 사용
+```java
+레퍼런스가 가리키는 객체의 타입 식별: 연산의 결과는 true/false의 불린 값으로 변환
+
+Person p = new Professor();
+
+if(p instanceof Person) // true
+if(p instanceof Student) // false
+if(p instanceof Researcher) // true
+if(p instanceof Professor) // true
+
+if("java" instanceof String) // true
+```
+
+### 메소드 오버라이딩(Method Overriding)
+```java
+서브 클래스에서 슈퍼 클래스의 메소드 중복 작성
+슈퍼 클래스의 메소드 무력화, 항상 서브 클래스에 오버라이딩한 메소드가 실행되도록 보장됨
+
+오버라이딩 조건
+-> 슈퍼 클래스 메소드의 원형(메소드 이름, 인자 타입 및 개수, 리턴 타입) 동일하게 작성
+
+class A {
+    void f() {
+        System.out.println("A의 f() 호출");
+    }
+}
+class B extends A {
+    void f() { // 클래스 A의 f()를 오버라이딩
+        System.out.println("B의 f() 호출");
+    }
+}
+```
+
+### 오버라이딩의 목적, 다형성 실현
+```java
+오버라이딩으로 다형성 실현
+하나의 인터페이스(같은 이름)에 서로 다른 구현
+슈퍼 클래스의 메소드를 서브 클래스에서 각각 목적에 맞게 다르게 구현
+사례: Shape의 draw() 메소드를 Line, Rect, Circle에서 목적에 맞게 오버라이딩
+```
+
+
+
 ## 4월 17일(7주차)
 
 ### 생성자의 종류
@@ -394,10 +581,47 @@ class StaticMethod {
 
 ### static 메소드의 제약 조건 2
 ```java
-static 메소드는 객체 없이도 존재하기 때문에, static 메소드에서 this 사용 불가
+static 메소드는 this 사용불가
+static 메소드는 객체 없이도 사용 가능하므로, this 레퍼런스 사용할 수 없음
 
-static void f() { this.n = x; } // 오류. static 메소드에서는 this 사용 불가
-static void g() { this m = x; } // 오류. static 메소드에서는 this 사용 불가
+static void f() { this.n = x; } // 오류. static 메소드에서는 this 사용 불가능
+static void g() { this m = x; } // 오류. static 메소드에서는 this 사용 불가능
+```
+
+### final 클래스
+```java
+final 클래스 - 더 이상 클래스 상속 불가능
+
+final class FinalClass {
+    .....
+}
+
+class SubClass extends FinalClass { // 컴파일 오류 발생
+    .....
+}
+```
+
+### final 메소드
+```java
+final 메소드 - 더 이상 메소드 오버라이딩 불가능
+public class SuperClass {
+    protected final int finalMethod() { ... }
+}
+class subClass extends SuperClass { // SubClass가 SuperClass를 상속받음
+    protected int finalMethod() { ... } // 컴파일 오류. finalMethod() 오버라이딩할 수 없음
+}
+```
+
+### final 필드
+```java
+final 필드: 상수를 선언할 때 사용
+
+class SharedClass {
+    public static final double PI = 3.14;
+}
+
+상수 필드는 선언 시에 초기 값을 지정
+상수 필드는 실행 중에 값 변경 x
 ```
 
 ## 4월 10일(6주차)
