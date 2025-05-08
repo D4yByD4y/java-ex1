@@ -1,5 +1,264 @@
 # 진재원 202430131
 
+## 5월 8일(10주차)
+
+### 추상 클래스
+```java
+추상 메소드(abstract method)
+-> abstract로 선언된 메소드, 메소드의 코드는 없고 원형만 선언
+
+abstract public String getName(); // 추상 메소드
+abstract public String fail() { return "Good Bye"; } // 추상 메소드 아님, 컴파일 오류
+
+추상 클래스(abstract class)
+-> 추상 메소드를 가지며, abstract로 선언된 클래스
+-> 추상 메소드 없이, abstract로 선언한 클래스
+
+// 추상 메소드를 가진 추상 클래스
+abstract class Shape {
+    public Shape() { ... }
+    public void edit() { ... }
+
+    abstract public void draw(); // 추상 메소드
+}
+
+// 추상 메소드 없는 추상 클래스
+abstract class JComponent {
+    String name;
+    public void load(String name) {
+        this.name = name;
+    }
+}
+
+class fault { // 오류. 추상 메소드를 가지고 있으므로 abstract로 선언되어야 함
+    abstract public void f(); // 추상 메소드
+}
+```
+
+### 추상 클래스의 상속과 구현
+```java
+추상 클래스 상속
+-> 추상 클래스를 상속받으면 추상 클래스가 됨
+-> 서브 클래스도 abstract로 선언해야 함
+
+abstract class A { // 추상 클래스
+    abstract public int add(int x, int y); // 추상 메소드
+}
+
+abstract class B extends A { // 추상 클래스
+    public void show() { System.out.println("B"); }
+}
+
+A a = new A(); // 컴파일 오류. 추상 클래스의 인스턴스 생성 불가
+B b = new B(); // 컴파일 오류. 추상 클래스의 인스턴스 생성 불가
+
+추상 클래스 구현
+-> 서브 클래스에서 슈퍼 클래스의 추상 메소드 구현 (오버라이딩)
+-> 추상 클래스를 구현한 서브 클래스는 추상 클래스 아님
+
+class C extends A { // 추상 클래스 구현. C는 정상 클래스
+    public int add(int x, int y) { return x + y; } // 추상 메소드 구현. 오버라이딩
+    public void show() { System.out.println("C"); }
+}
+...
+C c = new C(); // 정상
+
+추상 클래스의 목적
+-> 상속을 위한 슈퍼 클래스로 활용하는 것
+-> 서브 클래스에서 추상 메소드 구현
+-> 다형성 실현
+```
+
+### 자바의 인터페이스
+```java
+소프트웨어를 규격화된 모듈로 만들고, 인터페이스가 맞는 모듈을 조립하듯이 응용프로그램을 작성하기 위해서 사용
+
+자바의 인터페이스
+-> 클래스가 구현해야 할 메소드들이 선언되는 추상형
+-> 인터페이스 선언: interface 키워드로 선언. Ex) public interface PhoneInterface
+
+interface PhoneInterface {
+    public static final int TIMEOUT = 10000; // 상수 필드. public static final 생략 가능
+    public abstract void sendCall(); // 추상 메소드. public abstract 생략 가능
+    public abstract void receiveCall(); // 추상 메소드. public abstract 생략 가능
+    public default void printLogo() { // 디폴트 메소드는 public 생략 가능
+        System.out.println(" ** Phone ** ");
+    } // 디폴트 메소드
+}
+```
+
+### 인터페이스 구성 요소들의 특징
+```java
+[ 인터페이스의 구성 요소들 ]
+상수: public만 허용, public static final 생략 가능
+추상 메소드: public abstract 생략 가능
+
+default 메소드
+-> 인터페이스에 코드가 작성된 메소드
+-> 인터페이스를 구현하는 클래스에 자동 상속
+-> public 접근 지정만 허용. 생략 가능
+
+private 메소드
+-> 인터페이스 내에 메소드 코드가 작성되어야 함
+-> 인터페이스 내에 있는 다른 메소드에 의해서만 호출 가능
+
+static 메소드
+-> public, private 모두 지정 가능. 생략하면 public
+```
+
+### 자바 인터페이스의 특징
+```java
+인터페이스의 객체 생성 불가
+new PhoneInterface(); // 오류. 인터페이스 PhoneInterface 객체 생성 불가
+
+인터페이스 타입의 레퍼런스 변수 선언 가능
+PhoneInterface galaxy; // galaxy는 인터페이스에 대한 레퍼런스 변수
+```
+
+### 인터페이스 상속
+```java
+인터페이스 간에 상속 가능
+-> 인터페이스를 상속하여 확장된 인터페이스 작성 가능
+-> extends 키워드로 상속 선언
+
+ex)
+interface MobilePhoneInterface extends PhoneInterface {
+    void sendSMS(); // 추상 메소드 추가
+    void receiveSMS(); // 추상 메소드 추가
+}
+
+인터페이스 다중 상속 허용 (* 일반 상속에서는 허용하지 않음)
+
+ex)
+interface MusicPhoneInterface extends PhoneInterface, MP3Interface {
+    .....
+}
+```
+
+### 인터페이스 구현
+```java
+인터페이스의 추상 메소드를 모두 구현한 클래스 작성
+-> implements 키워드 사용
+-> 여러 개의 인터페이스 동시 구현 가능
+
+인터페이스 구현 사례
+-> PhoneInterface 인터페이스를 구현한 SamsungPhone 클래스
+
+class SamsungPhone implements PhoneInterface { // 인터페이스 구현
+    // PhoneInterface의 모든 메소드 구현
+    public void sendCall() { System.out.println("띠리리리링"); }
+    public void receiveCall() { System.out.println("전화가 왔습니다."); }
+    // 메소드 추가 작성
+    public void flash() { System.out.println("전화기에 불이 켜졌습니다."); }
+}
+
+SamsungPhone 클래스는 PhoneInterface의 default 메소드 상속
+```
+
+### 자바의 패키지 / 모듈
+```java
+패키지(package)
+-> 서로 관련된 클래스와 인터페이스를 컴파일한 클래스 파일들을 묶어 놓은 디렉터리
+-> 하나의 응용프로그램은 한 개 이상의 패키지로 작성
+-> 패키지는 jar 파일로 압축 가능
+
+모듈(module)
+-> 여러 패키지와 이미지 등의 자원을 모아 놓은 컨테이너
+-> 하나의 모듈을 하나의 .jmod 파일에 저장
+
+Java 9부터 모듈화 도입
+
+플랫폼의 모듈화
+-> Java 9부터 자바 API의 모든 클래스들(자바 실행 환경)을 패키지 기반에서 모듈들로 완전히 재구성
+
+응용프로그램의 모듈화
+-> 클래스들은 패키지로 만들고, 다시 패키지를 모듈로 만듦. 모듈 프로그래밍은 어렵고 복잡.
+```
+
+### 패키지 사용하기, import 문
+```java
+다른 패키지에 작성된 클래스 사용
+-> import를 이용하지 않는 경우
+-> 소스에 클래스 이름의 완전 경로명 사용
+
+public class ImportExample {
+    public static void main(String[] args) {
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        System.out.println(scanner.next());
+    }
+}
+
+필요한 클래스만 import
+-> 소스 시작 부분에 클래스의 경로명 import
+-> import 패키지.클래스
+-> 소스에는 클래스 명만 명시하면 됨
+
+import java.util.Scanner;
+public class ImportExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.next());
+    }
+}
+
+패키지 전체를 import
+-> 소스 시작 부분에 패키지의 경로명.* import
+-> import 패키지.*
+-> 소스에는 클래스 명만 명시하면 됨
+-> import java.util.*;
+-> java.util 패키지 내의 모든 클래스만을 지정, 하위 패키지의 클래스는 포함하지 않음
+
+import java.util.*;
+public class ImportExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.next());
+    }
+}
+```
+
+### 패키지 만들기
+```java
+클래스 파일(.class)이 저장되는 위치
+-> 클래스나 인터페이스가 컴파일 되면 클래스 파일(.class) 생성
+-> 클래스 파일은 패키지로 선언된 디렉터리에 저장
+
+패키지 선언
+-> 소스 파일의 맨 앞에 컴파일 후 저장될 패키지 지정
+-> package 패키지명;
+
+package UI; // Tools 클래스를 컴파일하여 UI 패키지(UI 디렉터리)에 저장할 것을 지시
+public class Tools {
+    ......
+}
+↑ Tools 클래스의 경로명 UI.Tools
+
+package Graphic; // Line 클래스를 Graphic 패키지에 저장
+
+import UI.Tools;
+public class Line extend Shape {
+    public void draw() {
+        Tools t = new Tools();
+    }
+}
+
+디폴트 패키지
+package 선언문이 없는 자바 소스 파일
+-> 컴파일러는 클래스나 인터페이스를 디폴트 패키지에 소속시킴
+-> 디폴트 패키지 -> 현재 디렉터리
+```
+
+### package의 운영 방법
+```java
+패키지 이름은 도메인 기반으로 시작
+-> ex) com.회사이름.프로젝트명.기능명
+
+기능/역할별로 하위 패키지를 구분: utils, controller, service 등
+디렉터리 구조와 package 선언을 정확히 일치해야 함
+import는 필요한 만큼만, * 전체 import는 피하는 게 좋음
+```
+
+
 ## 4월 18일(보강)
 
 ### 클래스 상속과 객체
