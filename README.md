@@ -1,5 +1,208 @@
 # 진재원 202430131
 
+## 5월 15일(11주차)
+
+### 모듈
+    java 9에서 도입된 개념
+    패키지와 이미지 등의 리소스를 담은 컨테이너
+    모듈 파일(.jmod)로 저장
+
+### 자바 플랫폼의 모듈화
+    자바 플랫폼
+    -> 자바의 개발 환경(JDK)과 자바의 실행 환경(JRE)을 지칭. Java SE(자바 API) 포함.
+    -> 자바 API의 모든 클래스가 여러 개의 모듈로 재구성
+    -> 모듈 파일은 JDK의 jmods 디렉터리에 저장하여 배포
+
+    모듈 파일로부터 모듈을 푸는 명령
+    -> jmod extract "C:\Program Files\java\jdk-17.0.3.+7\jmods\java.base.jmod"
+    -> 현재 디렉터리에 java.base 모듈이 패키지와 클래스들로 풀림.
+
+### 자바 모듈화의 목적
+    자바 컴포넌트들을 필요에 따라 조립하여 사용하기 위함
+
+    컴퓨터 시스템의 불필요한 부담 ↓
+    -> 세밀한 모듈화를 통해 필요 없는 모듈이 로드되지 않게 함.
+    -> 소형 IoT 장치에도 자바 응용프로그램이 실행되고 성능을 유지되게 함
+
+### Object 클래스
+```java
+모든 자바 클래스는 반드시 Object를 상속받도록 자동 컴파일
+모든 클래스의 슈퍼 클래스
+모든 클래스가 상속받는 공통 메소드 포함
+
+주요 메소드
+boolean equals(Object obj)
+Class getClass()
+int hashCode()
+String toString()
+void notify()
+void notifyAll()
+void wait()
+.
+.
+.
+```
+
+### 객체 속성
+```java
+Object 클래스는 객체의 속성을 나타내는 메소드 제공
+
+hashCode() 메소드
+-> 객체의 해시코드 값을 리턴하며, 객체마다 다름
+
+getClass() 메소드
+-> 객체의 클래스 정보를 담은 Class 객체 리턴
+-> Class 객체의 getName() 메소드는 객체의 클래스 이름 리턴
+
+toString() 메소드
+-> 객체를 문자열로 리턴
+```
+
+### 객체 비교(==)와 equals() 메소드
+```java
+== 연산자: 객체 레퍼런스 비교
+
+Point a = new Point(2,3);
+Point b = new Point(2,3);
+Point c = a;
+
+if(a == b) // false
+    System.out.println("a==b");
+if(a == c) // true
+    System.out.println("a==c");
+
+boolean equals(Object obj)
+-> 두 객체의 내용물 비교
+-> 객체의 내용물을 비교하기 위해 클래스의 멤버로 작성
+```
+
+### Wrapper 클래스
+```java
+Wrapper 클래스: 자바의 기본 타입을 클래스화 한 8개 클래스
+
+기본 타입
+-> byte, short, int, long, char, float, double, boolean
+
+Wrapper 클래스
+-> Byte, Short, Integer, Long, Character, Float, Double, Boolean
+
+용도: 객체만 사용할 수 있는 컬렉션 등에 기본 타입의 값을 사용하기 위해 Wrapper 객체로 만들어 사용
+
+기본 타입의 값으로 Wrapper 객체 생성 (new 키워드 사용 X)
+Integer i = Integer.valueOf(10); // 정수 10의 객체화
+Character c = Character.valueOf('c'); // 문자 'c'의 객체화
+Double d = Double.valueOf(3.14); // 실수 3.14의 객체화
+Boolean b = Boolean.valueOf(true); // 불린 값 true의 객체화
+
+문자열로 Wrapper 객체 생성(Character 제외)
+Integer i = Integer.valueOf("10");
+Double d = Double.valueOf("3.14");
+Boolean b = Boolean.valueOf("false");
+```
+
+### Wrapper 활용
+```java
+Wrapper 객체로부터 기본 타입 값 알아내기
+Integer i = Integer.valueOf(10);
+int ii = i.intValue(); // ii = 10
+Character c = Character.valueOf('c');
+char cc = c.charValue(); // cc = 'c'
+Boolean b = Boolean.valueOf(true);
+boolean bb = b.booleanValue(); // bb = true
+
+문자열을 기본 데이터 타입으로 변환
+int i = Integer.parseInt("123"); // i = 123
+boolean b = Boolean.parseBoolean("true"); // b = true
+double d = Double.parseDouble("3.14"); // d = 3.14
+
+기본 타입을 문자열로 변환
+String s1 = Integer.toString(123); // 정수 123을 문자열 "123"으로 변환
+String s2 = Integer.toHexString(123); // 정수 123을 16진수의 문자열 "7b"로 변환
+String s3 = Double.toString(3.14); // 실수 3.14를 문자열 "3.14"으로 변환
+String s4 = Character.toString('a'); // 문자 'a'를 문자열 "a"로 변환
+String s5 = Boolean.toString(true); // 불린 값 true를 문자열 "true"로 변환
+```
+
+### 박싱과 언박싱
+```java
+박싱(boxing) : 기본 타입의 값 →(변환) Wrapper 객체
+언박싱(unboxing) : Wrapper 객체 →(변환) 기본 타입의 값 (박싱의 반대)
+
+Integer ten = Integer.valueOf(10); // 박싱
+int n = ten.intValue(); // 언박싱
+
+자동 박싱과 자동 언박싱 : JDK 1.5부터 박싱과 언박싱은 자동으로 이루어지도록 컴파일됨.
+Integer ten = 10; // 자동 박싱. Integer ten = Integer.valueOf(10);
+int n = ten; // 자동 언박싱. int n = ten.intValue();
+```
+
+### String의 생성과 특징
+```java
+String 클래스는 문자열을 나타냄
+스트링 리터럴(문자열 리터럴)은 String 객체로 처리됨
+
+스트링 객체의 생성 사례
+String str1 = "abcd";
+char data[] = {'a','b','c','d'};
+String str2 = new String(data);
+String str3 = new String("abcd"); // str2와 str3은 모두 "abcd" 스트링
+```
+
+### 스트링 리터럴과 new String()
+```java
+스트링 리터럴
+-> 자바 가상 기계 내부에서 리터럴 테이블에 저장되고 관리
+-> 응용프로그램에서 공유됨
+-> 스트링 리터럴 사례) String s = "Hello";
+
+new String()으로 생성된 스트링
+-> 스트링 객체는 힙 메모리에 생성
+-> 스트링은 공유되지 않음
+
+String a = "Hello";
+String b = "Java";
+String c = "Hello";
+
+String d = new String("Hello");
+String e = new String("Java"); 
+String f = new String("Java");
+```
+
+### 스트링 객체의 특징
+```java
+리터럴이든 new String()으로 생성했던, 생성된 스트링 객체는 수정이 불가능함
+String s = new String("Hello"); // s의 스트링은 수정 불가능
+String t = s.concat("Java"); // 스트링 s에 "Java"를 덧붙인 스트링 리턴
+```
+
+### String 활용
+```java
+스트링 비교, equals()와 compareTo()
+-> 스트링 비교에 == 연산자 절대 사용 금지
+equals() : 스트링이 같으면 true, 아니면 false 리턴
+String java = "Java";
+if(java.equals("Java")) // true
+
+int compareTo(String anotherString)
+-> 문자열이 같으면 0 리턴
+-> 이 문자열이 anotherString 보다 먼저 나오면 음수 리턴
+-> 이 문자열이 anotherString 보다 나중에 나오면 양수 리턴
+
+String java = "Java";
+String cpp = "C++";
+int res = java.compareTo(cpp);
+if(res == 0) System.out.println("the same");
+else if(res < 0) System.out.println(java + " < " + cpp); 
+else System.out.println(java + " > " + cpp);
+
+공백 제거, String trim()
+스트링 앞뒤에 있는 공백 문자를 제거한 스트링을 리턴
+
+String a = "  xyz\t";
+String b = a.trim(); // b = "xyz". 스페이스와 '\t' 제거됨
+```
+
+
 ## 5월 8일(10주차)
 
 ### 추상 클래스
