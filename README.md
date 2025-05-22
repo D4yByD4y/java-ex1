@@ -1,5 +1,360 @@
 # 진재원 202430131
 
+## 5월 22일(12주차)
+
+### StringBuffer 클래스
+```java
+buffer : 임시 저장 공간
+가변 스트링을 다루는 클래스
+
+StringBuffer 객체 생성
+StringBuffer sb = new StringBuffer("java");
+
+String 클래스와 달리 문자열 변경 가능
+-> 가변 크기의 버퍼를 가지고 있어 문자열 수정 O
+-> 문자열의 수정이 많은 작업에 적합
+
+스트링 조작 사례
+StringBuffer sb = new StringBuffer("This");
+
+sb.append(" is pencil."); // sb = "This is pencil."
+sb.insert(7, "my"); // sb = "This is my pencil."
+sb.replace(8, 10, "your"); // sb = "This is your pencil."
+System.out.println(sb); // "This is your pencil." 출력
+```
+
+### StringTokenizer 클래스
+```java
+구분 문자를 기준으로 문자열을 분리하는 클래스
+-> 구분 문자(delimiter) : 문자열을 구분할 때 사용되는 문자
+-> 토큰(token) : 구분 문자로 분리된 문자열
+
+ex)
+String query = "name=kitae&addr=seoul&age=21";
+StringTokenizer st = new StringTokenizer(query, "&");
+↓ 결과
+"name=kitae" // 토큰 1
+"addr=seoul" // 토큰 2
+"age=21"     // 토큰 3
+
+int count = st.countTokens(); // 토큰 개수 알아내기. count = 3
+String token = st.nextToken(); // 다음 토큰 얻어내기. st = "name=kitae"
+
+StringTokenizer로 문자열 분리 사례 ↓
+StringTokenizer st = new StringTokenizer(query, "&=");
+↓ 결과
+"name" // 토큰 1
+"kitae" // 토큰 2
+"addr" // 토큰 3
+"seoul" // 토큰 4
+"age" // 토큰 5
+"21" // 토큰 6
+```
+
+### Math 클래스
+```java
+기본 산술 연산 메소드를 제공하는 클래스
+
+모든 메소드는 static으로 선언
+-> 클래스 이름으로 호출 가능
+
+Math.random() 메소드로 난수 발생
+-> random()은 0보다 크거나 같고 1.0보다 작은 실수 난수 발생
+-> 1에서 100까지의 랜덤 정수 10개를 발생시키는 코드 사례 ↓
+for(int i = 0; i < 10; i++) {
+    int n = (int)(Math.random() * 100 + 1); // 1 ~ 100까지의 랜덤 정수 발생
+    System.out.println(n);
+}
+
+* java.util.Random 클래스를 이용하여 난수 발생 가능
+Random r = new Random();
+int n = r.nextInt(); // 음수, 양수, 0을 포함하여 자바의 정수 범위의 난수 발생
+int m = r.nextInt(100); // 0에서 99 사이(0과 99 포함)의 정수 난수 발생
+```
+
+### 컬렉션(collection)
+```java
+요소(element)라고 불리는 가변 개수의 객체들의 저장소
+-> 객체들의 컨테이너라고도 불림
+-> 요소의 개수에 따라 크기 자동 조절
+-> 요소의 삽입, 삭제에 따른 요소의 위치 자동 이동
+
+고정 크기의 배열을 다루는 어려움 해소
+다양한 객체들의 삽입, 삭제, 검색 등의 관리 용이
+```
+
+### 컬렉션의 특징
+```java
+1. 컬렉션은 제네릭(generics) 기법으로 구현
+
+제네릭
+-> 특정 타입만 다루지 않고, 여러 종류의 타입으로 변신할 수 있도록 클래스나 메소드를 일반화시키는 기법
+-> 클래스나 인터페이스 이름에 <E>, <K>, <V> 등 타입 매개변수 포함
+
+제네릭 컬렉션 사례 : 벡터 Vector<E>
+-> <E>에서 E에 구체적인 타입을 주어 구체적인 타입만 다루는 벡터로 활용
+-> 정수만 다루는 컬렉션 벡터 Vector<Integer>
+-> 문자열만 다루는 컬렉션 벡터 Vector<String>
+
+2. 컬렉션의 요소는 객체만 가능
+int, char, double 등의 기본 타입으로 구체화 불가
+
+컬렉션 사례 ↓
+Vector<int> v = new Vector<int>(); // 컴파일 오류. int는 사용 불가
+Vector<Integer> v = new Vector<Integer>(); // 정상 코드
+```
+
+### 제네릭의 기본 개념
+```java
+제네릭
+-> JDK 1.5부터 도입(2004년 기점)
+-> 모든 종류의 데이터 타입을 다룰 수 있도록 일반화된 타입 매개 변수로 클래스(인터페이스)나 메소드를 작성하는 기법
+-> C++의 템플릿(template)과 동일
+```
+
+### Vector <-E->의 특성
+```java
+<E>에 사용할 요소의 특정 타입으로 구체화
+
+배열을 가변 크기로 다룰 수 있게 하는 컨테이너
+-> 배열의 길이 제한 극복
+-> 요소의 개수가 넘치면 자동으로 길이 조절
+
+요소 객체들을 삽입, 삭제, 검색하는 컨테이너
+-> 삽입, 삭제에 따라 자동으로 요소의 위치 조정
+
+Vector에 삽입 가능한 것
+-> 객체, null
+-> 기본 타입의 값은 Wrapper 객체로 만들어 저장
+
+Vector에 객체 삽입
+-> 벡터의 맨 뒤, 중간에 객체 삽입 가능
+
+Vector에서 객체 삭제
+-> 임의의 위치에 있는 객체 삭제 가능
+```
+
+### Vector 생성
+```java
+Vector<Integer> v = new Vector<Integer>(); // 정수만 사용 가능한 벡터
+
+int, char, double 등의 기본 타입을 E에 사용할 수 없음.
+Vector<int> v = new Vector<int>(); // 오류. int는 사용 불가
+
+문자열만 다루는 벡터
+Vector<String> StringVector = new Vector<String>();
+
+용량 초기 설정
+Vector<Integer> v = new Vector<Integer>(7); // 초기 용량이 7인 벡터 생성
+```
+
+### 벡터 요소 삽입
+```java
+add() 메소드를 이용하여 벡터의 끝이나 중간에 요소를 삽입
+v.add(Integer.valueOf(5));
+v.add(Integer.valueOf(4));
+v.add(Integer.valueOf(-1));
+
+자동 박싱 기능을 활용하면 위의 코드는 이렇게도 사용 가능
+v.add(5);
+v.add(4);
+v.add(-1);
+
+자동 박싱에 의해 int 타입의 정수는 자동으로 Integer 객체로 변환되어 삽입
+but, 벡터 v에는 Integer 외의 다른 타입의 객체 삽입 x
+v.add("hello"); // 컴파일 오류. v에는 정수만 삽입 가능
+
+벡터에는 null 삽입 가능. 벡터를 검색할 때 null이 있을 수 있음을 염두해야 함.
+v.add(null);
+
+add()를 이용하여 벡터의 중간에 객체 삽입
+v.add(2, 100); // v.add(2, Integer.valueOf(100)); 과 동일.
+
+위의 코드는 인덱스 2의 위치에 정수 100을 삽입하고, 기존의 인덱스 2와 그 뒤에 있는 요소들을 모두 한 자리씩 뒤로 이동시킴. 만약 벡터에 1개의 요소밖에 없다면 코드 실행 시 예외 발생.
+```
+
+### 벡터 내의 요소 알아내기
+```java
+get(), elementAt() 메소드 이용
+Integer obj = v.get(1); // 벡터의 1번째 요소 얻어내기
+int i = obj.intValue(); // obj에 있는 정수를 알아냄. 이 값은 4
+
+자동 언박싱 활용
+int i = v.get(1); // 자동 언박싱
+```
+
+### 벡터의 크기와 용량 알아내기
+```java
+벡터의 크기란 벡터에 들어 있는 요소의 개수를 말함.
+size() 메소드 이용
+벡터의 용량이란 벡터가 수용할 수 있는 현재 크기를 말함.
+capacity() 메소드 이용
+
+int len = v.size(); // 벡터의 크기. 벡터에 존재하는 요소 객체의 수
+int cap = v.capacity(); // 벡터의 용량
+```
+
+### 벡터에서 요소 삭제
+```java
+remove() 메소드 이용
+v.remove(1); // 인덱스 1의 위치에 있는 요소 삭제
+
+위의 코드는 인덱스 1의 위치에 있는 요소를 삭제함.
+코드의 실행 결과 뒤에 있는 요소들이 한 자리씩 앞으로 이동함.
+객체 레퍼런스를 이용하여 remove() 호출 가능.
+Integer m = Integer.valueOf(100);
+v.add(m);
+...
+v.remove(m); // 레퍼런스 m의 요소 삭제
+
+벡터의 모든 요소 삭제
+removeAllElements() 메소드 호출
+v.removeAllElements();
+```
+
+### 컬렉션과 자동 박싱/언박싱
+```java
+JDK 1.5 이전
+-> 기본 타입 데이터를 Wrapper 객체로 만들어 삽입
+Vector<Integer> v = new Vector<Integer>();
+v.add(Integer.valueOf(4));
+-> 컬렉션으로부터 요소를 얻어올 때, Wrapper 클래스로 캐스팅 필요
+Integer n = (Integer)v.get(0);
+int k = n.intValue(); // k = 4
+
+JDK 1.5부터
+-> 자동 박싱/언박싱이 작동하여 기본 타입 값 삽입 가능
+Vector<Integer> v = new Vector<Integer>();
+v.add(4); // 4 -> Integer.valueOf(4)로 자동 박싱
+int k = v.get(0); // Integer 타입이 int 타입으로 자동 언박싱 k = 4
+```
+
+### 컬렉션 생성문의 진화 : Java 7, Java 10
+```java
+Java 7 이전
+Vector<Integer> v = new Vector<Integer>(); // Java 7 이전
+
+Java 7 이후
+-> 컴파일러의 타입 추론 기능 추가
+-> <>(다이아몬드 연산자)에 타입 매개변수 생략
+Vector<Integer> v = new Vector<>(); // Java 7부터 추가, 가능
+
+Java 10 이후
+-> var 키워드 도입, 컴파일러의 지역 변수 타입 추론 가능
+var v = new Vector<Integer>(); // Java 10부터 추가, 가능
+```
+
+### ArrayList<-E->
+```java
+가변 크기 배열을 구현한 클래스
+-> <E>에 요소로 사용할 특정 타입으로 구체화
+
+벡터와 거의 동일
+-> 요소 삽입, 삭제, 검색 등 벡터 기능과 거의 동일
+-> 벡터와 달리 스레드 동기화 기능 없음
+-> 다수 스레드가 동시에 ArrayList에 접근할 때 동기화되지 않음
+-> 개발자가 스레드 동기화 코드 작성
+```
+
+### ArrayList vs Vector
+```java
+ArrayList와 Vector는 모두 동적으로 크기가 늘어나는 배열 기반의 리스트 클래스
+
+[ArrayList vs Vector 비교 요약]
+    항목               ArrayList            |           Vector
+동기화 여부       비동기화(스레드 안전 X)        동기화(스레드 안전 O)
+    성능          빠름(싱글 스레드에 적합)       느림(동기화로 인한 오버헤드 발생)
+기본 크기 증가    1.5배씩 증가                   2배씩 증가
+                  (newCapacity = old + old/2)
+  도입 시기       Java 1.2                       Java 1.0
+사용 권장 여부    현대 개발에서 추천             특별한 이유가 없다면 지양
+
+요즘은 ArrayList가 기본 선택지
+Vector는 이제 거의 사용하지 않고, 멀티스레드가 필요하면 다른 방법(synchronizedList, CopyOnWriteArrayList)을 사용
+```
+
+### 컬렉션의 순차 검색을 위한 Iterator
+```java
+Iterator<E> 인터페이스
+-> 리스트 구조의 컬렉션에서 요소의 순차 검색을 위한 인터페이스
+-> Vector<E>, ArrayList<E>, LinkedList<E>가 상속받는 인터페이스
+
+Iterator 객체 얻어내기
+-> 컬렉션의 iterator() 메소드 호출: 해당 컬렉션을 순차 검색할 수 있는 Iterator 객체 리턴
+Vector<Integer> v = new Vector<Integer>();
+Iterator<Integer> it = v.iterator();
+
+컬렉션 검색 코드
+while(it.hasNext()) { // 모든 요소 방문
+    int n = it.next(); // 다음 요소 리턴
+}
+```
+
+### HashMap<K, V>
+```java
+키(key)와 값(value)의 쌍으로 구성되는 요소를 다루는 컬렉션
+-> K : 키로 사용할 요소의 타입
+-> V : 값으로 사용할 요소의 타입
+-> 키와 값이 한 쌍으로 삽입
+-> '값'을 검색하기 위해서는 반드시 '키' 이용
+
+삽입 및 검색이 빠른 특징
+-> 요소 삽입 : put() 메소드
+-> 요소 검색 : get() 메소드
+
+ex) HashMap<String, String> 생성, 요소 삽입, 요소 검색
+HashMap<String, String> h = new HashMap<String, String>(); // 해시맵 객체 생성
+
+h.put("apple", "사과"); // "apple" 키와 "사과" 값의 쌍을 해시맵에 삽입
+String kor = h.get("apple"); // "apple" 키로 값 검색. kor는 "사과"
+```
+
+### 제네릭 만들기
+```java
+제네릭 클래스 작성: 클래스 이름 옆에 일반화된 타입 매개 변수 추가
+public class MyClass<T> { // 제네릭 클래스 MyClass 선언, 타입 매개 변수 T
+    T val; // 변수 val의 타입은 T
+    void set(T a) {
+        val = a; // T 타입의 값 a를 val에 저장
+    }
+    T get() {
+        return val; // T 타입의 값 val 리턴
+    }
+}
+
+제네릭 객체 생성 및 활용
+MyClass<String> s = new MyClass<String>(); // 제네릭 타입 T를 String으로 구체화
+s.set("hello");
+System.out.println(s.get()); // "hello" 출력
+
+MyClass<Integer> n = new MyClass<Integer>(); // 제네릭 타입 T를 Integer로 구체화
+n.set(5);
+System.out.println(n.get()); // 숫자 5 출력
+```
+
+### 자바의 GUI
+```java
+GUI : 사용자가 편리하게 입출력 할 수 있도록 그래픽으로 화면을 구성하고, 마우스나 키보드로 입력 받을 수 있도록 지원하는 사용자 인터페이스
+
+자바 언어에서 GUI 응용프로그램 작성 : AWT와 Swing 패키지에 강력한 GUI 컴포넌트 제공.
+
+[AWT(Abstract Windowing Toolkit) 패키지]
+-> 자바가 처음 나왔을 때부터 배포된 GUI 패키지, 최근에는 거의 사용 X
+-> AWT 컴포넌트는 중량 컴포넌트(heavy weight component)
+-> AWT 컴포넌트의 그리기는 운영체제에 의해 이루어지며, 운영체제의 자원을 많이 소모하고 부담을 줌
+-> 운영체제가 직접 그리기 때문에 속도는 빠름
+
+[Swing 패키지]
+-> AWT 기술을 기반으로 작성된 자바 라이브러리
+-> 모든 AWT + 추가된 풍부하고 화려한 고급 컴포넌트
+-> AWT 컴포넌트를 모두 스윙으로 재작성.
+-> AWT 컴포넌트 이름 앞에 J자를 덧붙임
+-> 순수 자바 언어로 구현
+-> 스윙 컴포넌트는 경량 컴포넌트(light weight component)
+-> 스윙 컴포넌트는 운영체제의 도움을 받지 않고, 직접 그리기 때문에 운영체제에 부담주지 않음.
+-> 현재 자바의 GUI 표준으로 사용됨.
+```
+
 ## 5월 15일(11주차)
 
 ### 모듈
