@@ -1,3 +1,4 @@
+package chapter_04;
 public class Ex48ArrayParameter {
     static void replaceSpace(char a[]) {
         for(int i = 0; i < a.length; i++) {

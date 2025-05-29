@@ -1,3 +1,4 @@
+package chapter_04;
 public class Ex41Circle {
     int radius;     // 원의 반지름 필드(멤버 변수)
     String name;    // 원의 이름 필드(멤버 변수)

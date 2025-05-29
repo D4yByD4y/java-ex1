@@ -1,3 +1,4 @@
+package chapter_03;
 import java.util.Scanner;
 
 public class Ex35ContinueExample {

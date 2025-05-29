@@ -1,3 +1,4 @@
+package chapter_06;
 class Rect1 {
     private int width, height;
 

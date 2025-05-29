@@ -1,3 +1,4 @@
+package chapter_05;
 class Point1 {
     private int x, y;
     public Point1() { // 한 점을 구성하는 x, y 좌표

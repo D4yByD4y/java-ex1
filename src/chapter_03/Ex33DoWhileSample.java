@@ -1,3 +1,4 @@
+package chapter_03;
 public class Ex33DoWhileSample {
     public static void main(String[] args) {
         char a = 'a';

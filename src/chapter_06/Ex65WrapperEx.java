@@ -1,3 +1,4 @@
+package chapter_06;
 public class Ex65WrapperEx {
     public static void main(String[] args) {
         // Character 사용

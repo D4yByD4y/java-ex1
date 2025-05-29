@@ -1,3 +1,4 @@
+package chapter_03;
 public class Ex31ForSample {
     public static void main(String[] args) {
         int i, sum = 0;

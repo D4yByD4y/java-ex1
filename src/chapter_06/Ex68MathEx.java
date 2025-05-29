@@ -1,3 +1,4 @@
+package chapter_06;
 public class Ex68MathEx {
     public static void main(String[] args) {
         System.out.println(Math.abs(-3.14)); // 절댓값 구하기

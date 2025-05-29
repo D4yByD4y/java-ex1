@@ -1,5 +1,241 @@
 # 진재원 202430131
 
+## 5월 29일(13주차)
+
+### 컨테이너와 컴포넌트
+```java
+컨테이너
+-> 다른 컴포넌트를 포함할 수 있는 GUI 컴포넌트 : java.awt.Container를 상속받음
+-> 다른 컨테이너에 포함될 수 있음
+-> AWT 컨테이너 : Panel, Frame, Applet, Dialog, Window
+-> Swing 컨테이너 : JPanel, JFrame, JApplet, JDialog, JWindow
+
+컴포넌트
+-> 컨테이너에 포함되어야 화면에 출력될 수 있는 GUI 객체
+-> 다른 컴포넌트를 포함할 수 없는 순수 컴포넌트
+-> 모든 GUI 컴포넌트가 상속받는 클래스 : java.awt.Component
+-> 스윙 컴포넌트가 상속받는 클래스 : javax.swing.Jcomponent
+
+최상위 컨테이너
+-> 다른 컨테이너에 포함되지 않고도 화면에 출력되며, 독립적으로 존재 가능한 컨테이너
+-> 스스로 화면에 자신을 출력하는 컨테이너 : JFrame, JDialog, JApplet
+```
+
+### Swing GUI 프로그램 만들기
+```java
+스윙 GUI 프로그램을 만드는 과정
+1. 스윙 프레임 만들기
+2. main() 메소드 작성
+3. 스윙 프레임에 스윙 컴포넌트 붙이기
+
+스윙 프로그램 작성에 필요한 import문
+import java.awt.*;             // 그래픽 처리를 위한 클래스들의 경로명
+import java.awt.event.*;       // AWT 이벤트 사용을 위한 경로명
+import javax.swing.*;          // 스윙 컴포넌트 클래스들의 경로명
+import javax.swing.event.*;    // 스윙 이벤트를 위한 경로명
+```
+
+### Swing 프레임
+```java
+스윙 프레임 : 모든 스윙 컴포넌트를 담는 최상위 컨테이너
+-> JFrame을 상속받아 구현
+-> 컴포넌트들은 화면에 보이려면 스윙 프레임에 부착되어야 함
+-> 프레임을 닫으면 프레임에 부착된 모든 컴포넌트가 보이지 않게 됨
+
+스윙 프레임(JFrame) 기본 구성
+-> 프레임 : 스윙 프로그램의 기본 틀
+-> 메뉴바 : 메뉴들이 부착되는 공간
+-> 컨텐트팬 : GUI 컴포넌트들이 부착되는 공간
+```
+
+### 프레임 만들기, JFrame 클래스 상속
+```java
+스윙 프레임
+-> JFrame 클래스를 상속받은 클래스 작성
+-> 프레임의 크기 반드시 지정 : setSize() 호출
+-> 프레임을 화면에 출력하는 코드 반드시 필요 : setVisible(true) 호출
+```
+
+### Swing 응용프로그램에서 main()의 기능과 위치
+```java
+스윙 응용프로그램에서 main()의 기능 최소화 바람직
+-> 스윙 응용프로그램이 실행되는 시작점으로서의 기능만
+-> 스윙 프레임을 생성하는 정도의 코드로 최소화
+
+public static void main(String[] args) {
+    MyFrame frame = new MyFrame(); // 스윙 프레임 생성 
+}
+
+# frame 객체를 생성하고 사용하지 않기 때문에 worrying이 발생
+# 실무에서는 다음과 같이 코딩하는 것이 일반적 ↓
+
+public static void main(String[] args) {
+    new MyFrame();
+}
+```
+
+### 프레임에 컴포넌트 붙이기
+```java
+타이틀 달기
+-> super()나 setTitle() 이용
+
+MyFrame() { // 생성자
+    super("타이틀 문자열");
+}
+
+MyFrame() { // 생성자
+    setTitle("타이틀 문자열");
+}
+
+컨텐트팬에 컴포넌트 달기
+-> 컨텐트팬이란? 스윙 컴포넌트들이 부착되는 공간
+-> 컨텐트팬 알아내기 : 스윙 프레임에 붙은 디폴트 컨텐프팬 알아내기
+public class MyFrame extends JFrame {
+    MyFrame() {
+        ...
+        // 프레임의 컨텐트팬 알아내기
+        Container contentPane = getContentPane();
+    }
+    ...
+}
+
+-> 컨텐트팬에 컴포넌트 붙이기
+// 버튼 컴포넌트 생성
+JButton button = new JButton("Click");
+contentPane.add(button);    // 컨텐트팬에 버튼 부착
+
+-> 컨텐트팬 변경
+class MyPanel extends JPanel {
+    // JPanel을 상속받은 패널을 구현
+}
+frame.setContentPane(new MyPanel());
+```
+
+### Swing 응용프로그램의 종료
+```java
+응용프로그램 내에서 스스로 종료하는 방법
+-> 언제 어디서나 무조건 종료
+System.exit(0);
+
+프레임의 오른쪽 상단의 종료버튼(X)이 클릭되면 어떤 일이 일어나는가?
+-> 프레임 종료, 프레임 윈도우를 닫음 : 프레임이 화면에서 보이지 않게 됨
+
+프레임이 보이지 않게 되지만 응용프로그램이 종료한 것 아님
+-> 키보드나 마우스 입력을 받지 못함
+-> 다시 setVisible(true)를 호출하면, 보이게 되고 이전처럼 작동함
+
+프레임 종료버튼이 클릭될 때, 프레임과 함께 프로그램을 종료시키는 방법
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+```
+
+### 이벤트 기반 프로그래밍
+```java
+이벤트 기반 프로그래밍(Event Driven Programming)
+-> 이벤트의 발생에 의해 프로그램 흐름이 결정되는 방식
+->> 이벤트가 발생하면 이벤트를 처리하는 루튼(이벤트 리스너) 실행
+->> 실행될 코드는 이벤트의 발생에 의해 전적으로 결정
+
+-> 반대되는 개념 : 배치 실행(batch programming)
+->> 프로그램의 개발자가 프로그램의 흐름을 결정하는 방식
+
+-> 이벤트 종류
+->> 사용자의 입력 : 마우스 드래그, 마우스 클릭, 키보드 누름 등
+->> 센서로부터의 입력, 네트워크로부터 데이터 송수신
+->> 다른 응용프로그램이나 다른 스레드로부터의 메시지
+
+이벤트 기반 응용프로그램의 구조
+-> 각 이벤트마다 처리하는 리스너 코드 보유
+
+GUI 응용프로그램은 이벤트 기반 프로그래밍으로 작성됨
+-> GUI 라이브러리 종류 : C++의 MFC, C# GUI, Visual Basic, X Window, Android 등
+-> 자바의 AWT와 Swing
+```
+
+### 이벤트 객체
+```java
+이벤트 객체
+-> 발생한 이벤트에 관한 정보를 가진 객체
+-> 이벤트 리스너에 전달됨
+->> 이벤트 리스너 코드가 발생한 이벤트에 대한 상황을 파악할 수 있게 함
+
+이벤트 객체가 포함하는 정보
+-> 이벤트 종류와 이벤트 소스
+-> 이벤트가 발생한 화면 좌표 및 컴포넌트 내 좌표
+-> 이벤트가 발생한 버튼이나 메뉴 아이템의 문자열
+-> 클릭된 마우스 버튼 번호 및 마우스의 클릭 횟수
+-> 키의 코드 값과 문자 값
+-> 체크박스, 라디오버튼 등과 같은 컴포넌트에 이벤트가 발생하였다면 체크 상태
+
+이벤트 소스를 알아 내는 메소드 : Object getSource()
+-> 발생한 이벤트의 소스 컴포넌트 리턴
+-> Object 타입으로 리턴하므로 캐스팅하여 사용
+-> 모든 이벤트 객체에 대해 적용
+```
+
+### 리스너 인터페이스
+```java
+이벤트 리스너 : 이벤트를 처리하는 자바 프로그램 코드, 클래스로 작성
+
+자바는 다영한 리스터 인터페이스 제공
+
+ex) ActionListener 인터페이스 - 버튼 클릭 이벤트를 처리하기 위한 인터페이스
+interface ActionListener {  // 아래 메소드를 개발자가 구현
+    public void actionPerformed(ActionEvent e); // Action 이벤트 발생시 호출
+}
+
+ex) MouseListener 인터페이스 - 마우스 조작에 따른 이벤트를 처리하기 위한 인터페이스
+interface MouseListener {   // 아래 5개 메소드를 개발자가 구현
+    public void mousePressed(MouseEvent e); // 마우스 버튼이 눌러지는 순간
+    public void mouseReleased(MouseEvent e); // 눌러진 마우스 버튼이 떼어지는 순간
+    public void mouseClicked(MouseEvent e); // 마우스가 클릭되는 순간
+    public void mouseEntered(MouseEvent e); // 마우스가 컴포넌트 위에 올라가는 순간
+    public void mouseExited(MouseEvent e); // 마우스가 컴포넌트 위에서 내려오는 순간
+}
+```
+
+### 이벤트 리스너 작성 과정 사례
+```java
+1. 이벤트와 이벤트 리스너 선택
+-> 버튼 클릭을 처리하고 하는 경우
+->> 이벤트 : Action 이벤트, 이벤트 리스너 : ActionListener
+
+2. 이벤트 리스너 클래스 작성 : ActionListener 인터페이스 구현
+class MyActionListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {    // 버튼이 클릭될 때 호출
+        JButton b = (JButton)e.getSource(); // 사용자가 클릭한 버튼 알아내기
+        if(b.getText().equals("Action")) // 버튼의 현재 문자열이 "Action"인지 비교
+            b.setText("액션"); // JButton의 setText()를 호출하여 문자열 변경
+        else 
+            b.setText("Action");    // JButton의 setText()를 호출하여 문자열 변경
+    }
+}
+
+3. 이벤트 리스너 등록
+-> 이벤트를 받아 처리하고자 하는 컴포넌트에 이벤트 리스너 등록
+-> component.addXXXListener(listener)
+->> XXX : 이벤트 명, listener : 이벤트 리스너 객체
+
+MyActionListener listener = new MyActionListener(); // 리스너 인스턴스 생성
+btn.addActionListener(listener); // 리스너 등록
+```
+
+### 이벤트 리스너 작성 방법
+```java
+[3가지 방법]
+
+독립 클래스로 작성
+-> 이벤트 리스너를 완전한 클래스로 작성
+-> 이벤트 리스너를 여러 곳에서 사용할 때 적합
+
+내부 클래스(inner class)로 작성
+-> 클래스 안에 멤버처럼 클래스 작성
+-> 이벤트 리스너를 특정 클래스에서만 사용할 때 적합
+
+익명 클래스(anonymous class)로 작성
+-> 클래스의 이름 없이 간단히 리스너 작성
+-> 클래스 조차 만들 필요 없이 리스너 코드가 간단한 경우에 적합
+```
+
 ## 5월 22일(12주차)
 
 ### StringBuffer 클래스

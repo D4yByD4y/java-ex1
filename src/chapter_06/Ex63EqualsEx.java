@@ -1,3 +1,4 @@
+package chapter_06;
 class Point4 {
     int x, y;
     public Point4(int x, int y) {
