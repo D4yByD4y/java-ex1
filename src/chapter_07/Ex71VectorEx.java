@@ -5,6 +5,7 @@ public class Ex71VectorEx {
     public static void main(String[] args) {
         // 정수 값만 다루는 제네릭 벡터 생성
         Vector<Integer> v = new Vector<Integer>();
+        // Vector<Integer> v = new Vector<>(); 혹은 var v = new Vector<Integer>();로 간략히 쓸 수 있음
         v.add(5);   // 5 삽입
         v.add(4);   // 4 삽입
         v.add(-1);    // -1 삽입

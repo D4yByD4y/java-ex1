@@ -1,5 +1,5 @@
 package chapter_05;
-interface PhoneInterface { // 인터페이스 선언
+interface Ex56PhoneInterface { // 인터페이스 선언
     final int TIMEOUT = 10000; // 상수 필드 선언
     void sendCall(); // 추상 메소드
     void receiveCall(); // 추상 메소드
@@ -8,7 +8,7 @@ interface PhoneInterface { // 인터페이스 선언
     }
 }
 
-class SamsungPhone implements PhoneInterface { // 인터페이스 구현
+class Ex56SamsungPhone implements Ex56PhoneInterface { // 인터페이스 구현
     // PhoneInterface의 모든 추상 메소드 구현
     @Override
     public void sendCall() {
@@ -26,7 +26,7 @@ class SamsungPhone implements PhoneInterface { // 인터페이스 구현
 
 public class Ex56InterfaceEx {
     public static void main(String[] args) {
-        SamsungPhone phone = new SamsungPhone();
+        Ex56SamsungPhone phone = new Ex56SamsungPhone();
         phone.printLogo();
         phone.sendCall();
         phone.receiveCall();

@@ -1,9 +1,9 @@
 package chapter_04;
 import java.util.Scanner;
 
-class Book {
+class Ex47Book {
     String title, author;
-    public Book(String title, String author) {  // 생성자
+    public Ex47Book(String title, String author) {  // 생성자
         this.title = title;
         this.author = author;
     }
@@ -11,15 +11,15 @@ class Book {
 
 public class Ex47BookArray {
     public static void main(String[] args) {
-        Book [] book = new Book[2];
+        Ex47Book [] book = new Ex47Book[2];
         Scanner scanner = new Scanner(System.in);
         
-        for(int i = 0; i < book.length; i++) {
+        for(int i = 0; i < book.length; i++) {  // book.length = 2
             System.out.print("제목>>");
             String title = scanner.nextLine();
             System.out.print("저자>>");
             String author = scanner.nextLine();
-            book[i] = new Book(title, author);
+            book[i] = new Ex47Book(title, author);  // 배열 원소 객체 생성
         }
 
         for(int i = 0; i < book.length; i++) {

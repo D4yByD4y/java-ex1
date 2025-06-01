@@ -1,7 +1,7 @@
 package chapter_06;
-class Point3 {
+class Ex62Point {
     private int x, y;
-    public Point3(int x, int y) {
+    public Ex62Point(int x, int y) {
         this.x = x; this.y = y;
     }
     public String toString() { // Point3 객체를 문자열로 리턴하는 toString()
@@ -12,7 +12,7 @@ class Point3 {
 
 public class Ex62ToStringEx {
     public static void main(String[] args) {
-        Point3 a = new Point3(2, 3);
+        Ex62Point a = new Ex62Point(2, 3);
         System.out.println(a.toString());
         System.out.println(a);
     }

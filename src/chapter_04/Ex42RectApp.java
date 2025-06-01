@@ -1,7 +1,7 @@
 package chapter_04;
 import java.util.Scanner;
 
-class Rectangle {
+class Ex42Rectangle {
     int width;
     int height;
     public int getArea() {
@@ -11,7 +11,7 @@ class Rectangle {
 
 public class Ex42RectApp {
     public static void main(String[] args) {
-        Rectangle rect = new Rectangle();   // 객체 생성
+        Ex42Rectangle rect = new Ex42Rectangle();   // 객체 생성
         Scanner scanner = new Scanner(System.in);
         System.out.print(">> ");
         rect.width = scanner.nextInt();

@@ -1,15 +1,15 @@
 package chapter_06;
-class Rect1 {
+class Ex64Rect {
     private int width, height;
 
-    public Rect1(int width, int height) {
+    public Ex64Rect(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Rect1 p = (Rect1) obj;
+    public boolean equals(Object obj) { // 사각형 면적 비교
+        Ex64Rect p = (Ex64Rect) obj;    // obj를 Ex64Rect로 다운 캐스팅
         if (width*height == p.width*p.height) return true;
         else return false;
     }
@@ -17,9 +17,9 @@ class Rect1 {
 
 public class Ex64RectEx {
     public static void main(String[] args) {
-        Rect1 a = new Rect1(2, 3); // 면적 6
-        Rect1 b = new Rect1(3, 2); // 면적 6
-        Rect1 c = new Rect1(3, 4); // 면적 12
+        Ex64Rect a = new Ex64Rect(2, 3); // 면적 6
+        Ex64Rect b = new Ex64Rect(3, 2); // 면적 6
+        Ex64Rect c = new Ex64Rect(3, 4); // 면적 12
 
         if (a.equals(b)) {
             System.out.println("a is equal to b");

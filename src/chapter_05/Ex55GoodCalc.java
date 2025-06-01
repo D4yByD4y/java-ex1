@@ -1,11 +1,11 @@
 package chapter_05;
-abstract class Calculator {
+abstract class Ex55Calculator {
     public abstract int add(int a, int b);
     public abstract int subtract(int a, int b);
     public abstract double average(int[] a);
 }
 
-public class Ex55GoodCalc extends Calculator {
+public class Ex55GoodCalc extends Ex55Calculator {
     @Override
     public int add(int a, int b) {
         return a + b;
