@@ -1,5 +1,224 @@
 # 진재원 202430131
 
+## 6월 5일(14주차)
+
+### 익명 클래스로 이벤트 리스너 작성
+```java
+익명 클래스(anonymous class) : 이름 없는 클래스
+-> (클래스 선언 + 인스턴스 생성)을 한번에 달성
+
+new 익명클래스의슈퍼클래스이름(생성자인자들) {
+    ...
+    익명클래스의 멤버 구현
+    ...
+}
+-> 간단한 리스너의 경우 익명 클래스 사용 추천
+-> 메소드의 개수가 1, 2개인 리스너(ActionListener, ItemListener)에 대해 주로 사용
+```
+
+### 어댑터 클래스
+```java
+이벤트 리스너 구현에 따른 부담
+-> 리스너의 추상 메소드를 모두 구현해야 하는 부담
+-> 예) 마우스 리스너에서 마우스가 눌러지는 경우(mousePressed())만 처리하고자 하는 경우에도 나머지 4개의 메소드를 모두 구현해야 하는 부담
+
+어댑터 클래스(Adapter)
+-> 리스너의 모든 메소드를 단순 리턴하도록 만든 클래스(JDK에서 제공)
+-> MouseAdapter 예시
+class MouseAdapter implements MouseListener, MouseMotionListener, MouseWheelListener {
+    // MouseListener 메소드
+    public void mousePressed(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
+
+    // MouseMotionListener 메소드
+    public void mouseDragged(MouseEvent e) { }
+    public void mouseMoved(MouseEvent e) { }
+
+    // MouseWheelListener 메소드
+    public void mouseWheelMoved(MouseEvent e) { }
+}
+
+추상 메소드가 하나뿐인 리스너는 어댑터 없음
+-> ActionAdapter, ItemAdapter 클래스는 존재하지 않음
+```
+
+### Key 이벤트와 포커스
+```java
+키 입력 시, 다음 세 경우 각각 Key 이벤트 발생
+-> 키를 누르는 순간
+-> 누른 키를 떼는 순간
+-> 누른 키를 떼는 순간(Unicode 키의 경우에만)
+
+키 이벤트를 받을 수 있는 조건
+-> 모든 컴포넌트
+-> 현재 포커스(focus)를 가진 컴포넌트가 키 이벤트 독점
+
+포커스(focus)
+-> 컴포넌트나 응용프로그램이 키 이벤트를 독점하는 권한
+-> 컴포넌트에 포커스 설정 방법: 다음 2 라인 코드 필요
+component.setFocusable(true);   // component가 포커스를 받을 수 있도록 설정
+component.requestFocus();   // component에게 포커스를 주어 키 입력을 받을 수 있게 함
+```
+
+### KeyListener
+```java
+응용프로그램에서 KeyListener를 상속받아 키 리스너 구현
+KeyListener의 3개 메소드
+
+void keyPressed(KeyEvent e) {
+    // 이벤트 처리 루틴
+}
+
+void keyReleased(KeyEvent e) {
+    // 이벤트 처리 루틴
+}
+
+void keyTyped(KeyEvent e) {
+    // 이벤트 처리 루틴
+}
+```
+
+### 유니코드(Unicode) 키
+```java
+유니코드 키의 특징
+-> 국제 산업 표준
+-> 전 세계의 문자를 컴퓨터에서 일관되게 표현하기 위한 코드 체계
+-> 문자들에 대해서만 키 코드 값 정의 : A~Z, a~z, 0~9, !, @, & 등
+
+문자가 아닌 키 경우에는 표준화된 키 코드 값 없음
+-> <Function> 키, <Home> 키, <Up> 키, <Delete> 키, <Control> 키, <Shift> 키, <Alt> 키 등은 플랫폼에 따라 키 코드 값이 다를 수 있음
+
+유니코드 키가 입력되는 경우
+-> keyPressed(), keyTyped(), keyReleased() 가 순서대로 호출
+
+유니코드 키가 아닌 경우
+-> keyPressed(), keyReleased() 만 호출
+```
+
+### 가상 키와 입력된 키 판별
+```java
+KeyEvent 객체
+-> 입력된 키 정보를 가진 이벤트 객체
+-> KeyEvent 객체의 메소드로 입력된 키 판별
+
+KeyEvent 객체의 메소드로 입력된 키 판별
+-> char KeyEvent.getKeyChar()
+-> 키의 유니코드 문자 값 리턴
+-> Unicode 문자 키인 경우에만 의미 있음
+-> 입력된 키를 판별하기 위해 문자 값과 비교하면 됨
+
+public void keyPressed(KeyEvent e) {
+    if(e.getKeyChar() == 'q') {
+        System.exit(0); // 키 q가 눌러지면 프로그램을 종료함
+    }
+}
+
+int KeyEvent.getKeyCode()
+-> 유니코드 키 포함
+-> 모든 키에 대한 정수형 키 코드 리턴
+-> 입력된 키를 판별하기 위해 가상키(Virtual Key) 값과 비교하여야 함
+-> 가상 키 값은 KeyEvent 클래스에 상수로 선언
+
+public void keyPressed(KeyEvent e) {
+    if(e.getKeyCode() == KeyEvent.VK_F5) {
+        System.exit(0); // <F5> 키가 눌러지면 프로그램을 종료함
+    }
+}
+```
+
+### Mouse 이벤트와 MouseListener, MouseMotionListener
+```java
+Mouse 이벤트 : 사용자의 마우스 조작에 따라 발생하는 이벤트
+-> mouseClicked() : 마우스가 눌러진 위치에서 그대로 떼어질 때 호출
+-> mouseReleased() : 마우스가 눌러진 위치에서 그대로 떼어지든 아니든 항상 호출
+-> mouseDragged() : 마우스가 드래그되는 동안 계속 여러번 호출
+
+마우스가 눌러진 위치에서 떼어지는 경우 메소드 호출 순서
+mousePressed(), mouseReleased(), mouseClicked()
+
+마우스가 드래그될 때 호출되는 메소드 호출 순서
+mousePressed(), mouseDragged(), mouseDragged(), ..., mouseDragged(), mouseReleased()
+```
+
+### 마우스 리스너 달기와 MouseEvent 객체 활용
+```java
+마우스 리스너 달기
+-> 마우스 리스너는 컴포넌트에 다음과 같이 등록
+component.addMouseListener(myMouseListener);
+
+-> 컴포넌트가 마우스 무브(mouseMoved())나 마우스 드래깅(mouseDragged())을 함께 처리하고자 하면, MouseMotion 리스너 따로 등록
+component.addMouseMotionListener(myMouseMotionListener);
+
+MouseEvent 객체 활용
+-> 마우스 포인트의 위치, 컴포넌트 내 상대 위치 : int getX(), int getY()
+public void mousePressed(MouseEvent e) {
+    int x = e.getX();   // 마우스가 눌러진 x 좌표
+    int y = e.getY();   // 마우스가 눌러진 y 좌표
+}
+
+마우스 클릭 횟수 : int getClickCount();
+public void mouseClicked(MouseEvent e) {
+    if(e.getClickCount() == 2) {
+        ... // 더블클릭 처리 루틴
+    }
+}
+```
+
+### 자바의 GUI 프로그래밍 방법
+```
+[자바의 GUI 프로그래밍 방법 2종류]
+
+컴포넌트 기반 GUI 프로그래밍
+-> 스윙 컴포넌트를 이용하여 쉽게 GUI를 구축
+-> 자바에서 제공하는 컴포넌트의 한계를 벗어나지 못함
+
+그래픽을 이용하여 GUI 구축
+-> 그래픽 기반 GUI 프로그래밍
+-> 개발자가 직접 그래픽으로 화면을 구성하는 부담
+-> 독특한 GUI를 구성할 수 있는 장점
+-> GUI 처리의 실행 속도가 빨라, 게임 등에 주로 이용
+```
+
+### 스윙 컴포넌트의 공통 메소드, JComponent의 메소드
+```java
+JComponent
+-> 스윙 컴포넌트들의 멤버를 모두 상속받는 슈퍼 클래스, 추상 클래스
+-> 스윙 컴포넌트들이 상속받는 공통 메소드와 상수 구현
+-> JComponent의 주요 메소드 사례
+
+컴포넌트의 모양과 관련된 메소드
+void setForeground(Color)   // 전경색 설정
+void setBackground(Color)   // 배경색 설정
+void setOpaque(boolean)     // 불투명성 결정
+void setFont(Font)          // 폰트 설정
+Font getFont()              // 폰트 리턴
+
+컴포넌트의 상태와 관련된 메소드
+void setEnabled(boolean)    // 컴포넌트 활성화/비활성화
+void setVisible(boolean)    // 컴포넌트 보이기/숨기기
+boolean isVisible()         // 컴포넌트의 보이는 상태 리턴
+
+컴포넌트의 위치와 크기에 관련된 메소드
+int getWidth()      // 폭 리턴
+int getHeight()     // 높이 리턴
+int getX()          // x 좌표 리턴
+int getY()          // y 좌표 리턴
+Point getLocationOnScreen()     // 스크린 좌표상에서의 컴포넌트 좌표
+void setLocation(int, int)      // 위치 지정
+void setSize(int, int)          // 크기 지정
+
+컨테이너를 위한 메소드
+Component add(Component)        // 자식 컴포넌트 추가
+void remove(Component)          // 자식 컴포넌트 제거
+void removeALL()                // 모든 자식 컴포넌트 제거
+Component[] getComponents()         // 자식 컴포넌트 배열 리턴
+Container getParent()               // 부모 컨테이너 리턴
+Container getTopLevelAncestor()     // 최상위 부모 컨테이너 리턴
+```
+
 ## 5월 29일(13주차)
 
 ### 컨테이너와 컴포넌트
